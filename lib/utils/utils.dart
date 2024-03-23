@@ -9,7 +9,7 @@ final List<String> categoriesProPakistani = [
   'Sports',
   'Automobile',
   'News',
-  'Press Release',
+  
 ];
 
 final List<String> linkCategoriesProPakistani = [
@@ -23,7 +23,7 @@ final List<String> linkCategoriesProPakistani = [
   'category/others/sports',
   'category/others/automobile',
   'category/filter/news',
-  'category/filter/Press-Releases',
+  
 ];
 
 final List<String> newsChannels = [
@@ -44,12 +44,7 @@ final List<String> categoriesTribune = [
   'TV',
   'World',
   'Pakistan',
-  'Sindh',
-  'Punjab',
-  'Balochistan',
-  'K-P',
-  'Jammu & Kashmir',
-  'Gilgit Baltistan'
+  'blogs',
 ];
 
 final List<String> categoriesDawn = [

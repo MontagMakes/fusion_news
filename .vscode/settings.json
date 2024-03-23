@@ -6,6 +6,7 @@
         "playfair",
         "prefs",
         "propakistani",
-        "RGBO"
+        "RGBO",
+        "vsync"
     ]
 }

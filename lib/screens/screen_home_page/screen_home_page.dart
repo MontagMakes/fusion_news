@@ -1,6 +1,5 @@
 import 'package:fusion_news/globals/globals.dart';
 import 'package:fusion_news/providers/provider_news_channel.dart';
-import 'package:fusion_news/providers/provider_news_propakistani.dart';
 import 'package:fusion_news/screens/screen_description/screen_description.dart';
 import 'package:fusion_news/screens/screen_home_page/appbar_changer.dart';
 import 'package:fusion_news/screens/screen_home_page/drawer_header_changer.dart';
@@ -28,43 +27,26 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   late TabController _tabController;
 
-  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 11, vsync: this);
-    
+    _tabController = TabController(length: 10, vsync: this);
     
     _tabController.addListener(() {
-      getIt<NewsProviderProPakistani>().getNews();  
+      getIt<NewsChannelProvider>().activeChannel(context).setCurrentCategory(_tabController.index);
+      setState(() {
+        categoryIndex = _tabController.index;
+        getIt<NewsChannelProvider>().activeChannel(context).getNews();  
+      });
     });
-    
-    
   }
   
   @override
   Widget build(BuildContext context) {
     var newsProvider = Provider.of<NewsChannelProvider>(context);
-
-    var currentChannel = newsProvider.currentChannel;
-
-    List<String> categories;
-
-    if (currentChannel == "ProPakistani") {
-      categories = categoriesProPakistani;
-    } else if (currentChannel == "Dawn") {
-      categories = categoriesDawn;
-    } else if (currentChannel == "Tribune") {
-      categories = categoriesTribune;
-    } else if (currentChannel == "default") {
-      categories = categoriesProPakistani;
-    } else {
-      throw Exception('Unknown channel: $currentChannel');
-    }
-
     return DefaultTabController(
-      length: categories.length,
+      length: newsProvider.getCategories().length,
       child: Scaffold(
         
           drawerDragStartBehavior: DragStartBehavior.start,
@@ -113,13 +95,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                         MediaQuery.of(context).size.width * 0.05),
                           ),
                           onTap: () {
-                            newsProvider.activeChannel(context).getNews();
                             if (mounted) {
+                              newsProvider.activeChannel(context).getNews();
                               setState(() {
+                                getIt<NewsChannelProvider>().switchChannel(newsChannels[index]);
                                 newsProvider.switchChannel(newsChannels[index]);
-                                newsProvider
-                                    .activeChannel(context)
-                                    .setCurrentCategory(0);
+                                categoryIndex = 0;
+                                _tabController.index = 0;
+                                
                                 Navigator.pop(context);
                               });
                             }
@@ -147,10 +130,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     DrawerHeaderChanger(newsProvider: newsProvider),
       
                     //Looping over the Category List to create a list of Categories
-                    for (int i = 0; i < categories.length; i++)
+                    for (int i = 0; i < newsProvider.getCategories().length; i++)
                       ListTile(
                         title: Text(
-                          categories[i],
+                          newsProvider.getCategories()[i],
                           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontSize: MediaQuery.of(context).size.width * 0.04),
                         ),
@@ -186,9 +169,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           //AppBar
           appBar: AppBarChanger(newsProvider: newsProvider),
           bottomNavigationBar: TabBar(
+            tabAlignment: TabAlignment.start,
             onTap: (value) {
               newsProvider.activeChannel(context).setCurrentCategory(value);
-              print("Category Index: $value");
+              
               if (mounted) {
                 setState(() {
                   newsProvider.activeChannel(context).getNews();
@@ -208,9 +192,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             },
             isScrollable: true,
             tabs: [
-              for (int i = 0; i < categories.length; i++)
+              for (int i = 0; i < 10; i++)
                 Tab(
-                  text: categories[i],
+                  text: newsProvider.getCategories()[i],
                 )
             ],
             controller: _tabController,
@@ -223,11 +207,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  print("selected Index: $_selectedIndex");
-                  print("category Index: $categoryIndex");
                   return TabBarView(
                       controller: _tabController,
-                      children: List.generate(categories.length, (index) {
+                      children: List.generate(newsProvider.getCategories().length, (index) {
                         return Column(
                           children: [
                             
@@ -236,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Text(
-                                  categories[_selectedIndex],
+                                  newsProvider.getCategories()[categoryIndex],
                                   style: TextStyle(
                                     fontSize:
                                         MediaQuery.of(context).size.width * 0.05,

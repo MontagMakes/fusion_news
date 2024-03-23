@@ -7,13 +7,14 @@ import 'package:fusion_news/providers/provider_news_channel.dart';
 import 'package:fusion_news/providers/provider_news_tribune.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fusion_news/service_locator.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 import 'providers/provider_shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  setupServiceLocator();
   // //Firebase
   // await Firebase.initializeApp();
 

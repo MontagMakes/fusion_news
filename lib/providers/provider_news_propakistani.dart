@@ -13,7 +13,6 @@ class NewsProviderProPakistani with ChangeNotifier {
 
   getNews() async {
     _stories = (await ProPakistaniApiService().getNewsProPakistani(_category));
-    print("ProPakistani category: ${_category}");
     notifyListeners();
   }
 

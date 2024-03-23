@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 class NewsChannelProvider with ChangeNotifier {
   String _currentChannel = "default";
   String get currentChannel => _currentChannel;
+
+  List<String> _categories = categoriesProPakistani;
+  List<String> get categories => _categories;
   
   // Return the provider of the active channel
   activeChannel(BuildContext context){
@@ -28,8 +31,23 @@ class NewsChannelProvider with ChangeNotifier {
       }
   }
 
-  switchChannel(String currentChannel) {
-    _currentChannel = currentChannel;
+  switchChannel(String channel) {
+    _currentChannel = channel;
     notifyListeners();
+  }
+
+  getCategories () {
+    if (currentChannel == "ProPakistani") {
+      _categories = categoriesProPakistani;
+    } else if (currentChannel == "Dawn") {
+      _categories = categoriesDawn;
+    } else if (currentChannel == "Tribune") {
+      _categories = categoriesTribune;
+    } else if (currentChannel == "default") {
+      _categories = categoriesProPakistani;
+    } else {
+      _categories = [];
+    }
+    return _categories;
   }
 }
