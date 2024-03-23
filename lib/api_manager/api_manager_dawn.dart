@@ -10,12 +10,15 @@ abstract class IApiManager{
 class DawnApiService implements IApiManager{
   
   final String baseURL = "https://www.dawn.com/feeds/";
+  CancelToken cancelToken = CancelToken();
 
   @override
   Future<List<ModelStory>> getNewsDawn(String categoriesDawn) async {
     final List<ModelStory> toReturn = [];
     try {
-      var response = await Dio().get("$baseURL$categoriesDawn");
+      cancelToken.cancel("cancelled");
+      cancelToken = CancelToken();
+      var response = await Dio().get("$baseURL$categoriesDawn", cancelToken: cancelToken);
       
       final document = XmlDocument.parse(response.toString());
       final numberOfStories = document.findAllElements('title').length -1;
@@ -62,8 +65,10 @@ class DawnApiService implements IApiManager{
         ); 
       }
     } catch (e) {
-
-      throw Exception(e.toString());
+      if (e is DioException && DioExceptionType.cancel != e.type) {
+        throw Exception(e.toString());
+      }
+      
     }
     return toReturn;
   }

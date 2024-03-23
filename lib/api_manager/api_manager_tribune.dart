@@ -8,7 +8,11 @@ class TribuneApiService {
     List<ModelStory> toReturn = [];
     try {
       const baseURL = "https://tribune.com.pk/feed/";
-      var response = await Dio().get("$baseURL$categoriesTribune");
+      CancelToken cancelToken = CancelToken();
+      cancelToken.cancel("cancelled");
+      cancelToken = CancelToken();
+
+      var response = await Dio().get("$baseURL$categoriesTribune", cancelToken: cancelToken);
 
       if (response.statusCode == 200) {
         try {
@@ -66,7 +70,9 @@ class TribuneApiService {
         }
       }
     } catch (e) {
-      Exception(e.toString());
+      if (e is DioException && DioExceptionType.cancel != e.type) {
+        throw Exception(e.toString());
+      }
     }
     return toReturn;
   }

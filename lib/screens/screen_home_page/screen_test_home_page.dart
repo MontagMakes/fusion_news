@@ -18,10 +18,40 @@ class TabBarExample extends StatefulWidget {
   State<TabBarExample> createState() => _TabBarExampleState();
 }
 
-class _TabBarExampleState extends State<TabBarExample> {
+class _TabBarExampleState extends State<TabBarExample> with TickerProviderStateMixin{
+
+  late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+
+    _tabController.addListener(() {
+      getIt<NewsChannelProvider>()
+          .switchChannel(newsChannels[_tabController.index]);
+      
+      setState(() {
+        getIt<NewsChannelProvider>().activeChannel(context).getNews();
+      });
+    });
+  }
+
+  Color getIndicatorColor(String channel) {
+    if (channel == "ProPakistani" || channel == "default") {
+      return Colors.teal.shade800;
+    } else if (channel == "Dawn") {
+      return Colors.black;
+    } else {
+      return Colors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsChannelProvider>(context, listen: false);
+    final getNewsProvider = getIt<NewsChannelProvider>();
+
 
     return DefaultTabController(
       initialIndex: 0,
@@ -31,6 +61,7 @@ class _TabBarExampleState extends State<TabBarExample> {
           isScrollable: true,
           tabAlignment: TabAlignment.start,
             dividerColor: Colors.transparent,
+            indicatorColor: getIndicatorColor(newsProvider.currentChannel),
             onTap: (value) {
               if (mounted) {
                 newsProvider.activeChannel(context).getNews();
@@ -59,6 +90,8 @@ class _TabBarExampleState extends State<TabBarExample> {
             ],
           ),
         body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          
           children: <Widget>[
             NestedTabBar(),
             NestedTabBar(),

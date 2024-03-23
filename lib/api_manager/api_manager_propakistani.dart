@@ -5,12 +5,19 @@ import 'package:xml/xml.dart';
 
 class ProPakistaniApiService {
   Future<List<ModelStory>> getNewsProPakistani(categoriesTribune) async {
+
+    const String baseURL = "https://propakistani.pk/";
     List<ModelStory> toReturn = [];
     try {
-      var response = await Dio().get("https://propakistani.pk/$categoriesTribune/feed");
-      
+      //Handling rapid-fire requests  
+      CancelToken cancelToken = CancelToken();
+      cancelToken.cancel("cancelled");
+      cancelToken = CancelToken();
+
+      var response = await Dio().get("$baseURL$categoriesTribune/feed", cancelToken: cancelToken);
       if (response.statusCode == 200) {
         try {
+          
           var document = XmlDocument.parse(response.toString()).root;
           
           var numberOfStories = document.findAllElements("item").length;
@@ -63,8 +70,11 @@ class ProPakistaniApiService {
           throw Exception(e.toString());
         }
       }
+
     } catch (e) {
-      throw Exception(e.toString());
+      if (e is DioException && DioExceptionType.cancel != e.type) {
+        throw Exception(e.toString());
+      }
     }
     return toReturn;
   }

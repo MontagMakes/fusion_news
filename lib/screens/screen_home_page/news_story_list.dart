@@ -22,18 +22,18 @@ class NewsStoryList extends StatelessWidget {
     return Column(
       children: [
         //Category
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Text(
+        // Center(
+        //   child: Padding(
+        //     padding: const EdgeInsets.only(top: 10),
+        //     child: Text(
               
-              newsProvider.getCategories()[categoryIndex],
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-              ),
-            ),
-          ),
-        ),
+        //       newsProvider.getCategories()[categoryIndex],
+        //       style: TextStyle(
+        //         fontSize: MediaQuery.of(context).size.width * 0.05,
+        //       ),
+        //     ),
+        //   ),
+        // ),
 
         //Store the list of stories in a ListView
         Expanded(
