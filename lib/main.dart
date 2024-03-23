@@ -7,6 +7,7 @@ import 'package:fusion_news/providers/provider_news_channel.dart';
 import 'package:fusion_news/providers/provider_news_tribune.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fusion_news/screens/screen_home_page/screen_test_home_page.dart';
 import 'package:fusion_news/service_locator.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
         theme: theme,
         darkTheme: dark,
         themeAnimationDuration: const Duration(milliseconds: 500),
-        home: const MyHomePage(),
+        home: const TabBarExample(),
       ),
     );
   }

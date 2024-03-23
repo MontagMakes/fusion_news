@@ -11,6 +11,9 @@ class NewsChannelProvider with ChangeNotifier {
 
   List<String> _categories = categoriesProPakistani;
   List<String> get categories => _categories;
+
+  int _categoryIndex = 0;
+  int get categoryIndex => _categoryIndex;
   
   // Return the provider of the active channel
   activeChannel(BuildContext context){
@@ -49,5 +52,14 @@ class NewsChannelProvider with ChangeNotifier {
       _categories = [];
     }
     return _categories;
+  }
+
+  setCurrentCategory(int index) {
+    _categoryIndex = index;
+    notifyListeners();
+  }
+
+  getCurrentCategory() {
+    return _categoryIndex;
   }
 }
