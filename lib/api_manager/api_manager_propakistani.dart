@@ -57,6 +57,7 @@ class ProPakistaniApiService {
             
 
             toReturn.add(ModelStory(
+                id: i,
                 title: title,
                 articleLink: articleLink,
                 date: date,

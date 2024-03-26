@@ -54,6 +54,7 @@ class DawnApiService implements IApiManager{
         
         toReturn.add(
           ModelStory(
+            id: i,
             title: title,
             description: "",
             imageURL: imgURL, 

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:fusion_news/providers/provider_news_brecorder.dart';
 import 'package:fusion_news/providers/provider_news_dawn.dart';
 import 'package:fusion_news/providers/provider_news_propakistani.dart';
 import 'package:fusion_news/providers/provider_news_tribune.dart';
@@ -26,6 +27,9 @@ class NewsChannelProvider with ChangeNotifier {
       } else if (currentChannel == newsChannels[2]){
         return context.read<NewsProviderTribune>();
 
+      } else if (currentChannel == newsChannels[3]){
+        return context.read<NewsProviderBrecorder>();
+
       } else if (currentChannel == "default"){
         return context.read<NewsProviderProPakistani>();
 
@@ -48,6 +52,8 @@ class NewsChannelProvider with ChangeNotifier {
       _categories = categoriesTribune;
     } else if (currentChannel == "default") {
       _categories = categoriesProPakistani;
+    } else if (currentChannel == "Brecorder") {
+      _categories = categoriesBrecorder;
     } else {
       _categories = [];
     }

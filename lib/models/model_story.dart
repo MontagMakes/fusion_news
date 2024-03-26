@@ -2,15 +2,17 @@
 import 'dart:convert';
 
 class ModelStory {
+  int id;
   String title;
   String description;
   String content;
   String articleLink;
   String date;
-  String? imageURL;
+  String imageURL;
   
   
   ModelStory({
+    this.id = 0,
     required this.title,
     required this.description,
     required this.content,
@@ -55,7 +57,7 @@ class ModelStory {
       content: map['content'] as String,
       articleLink: map['articleLink'] as String,
       date: map['date'] as String,
-      imageURL: map['imageURL'] != null ? map['imageURL'] as String : null,
+      imageURL: map['imageURL'] as String,
     );
   }
 

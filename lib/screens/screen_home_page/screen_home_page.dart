@@ -1,234 +1,200 @@
+// Importing necessary packages
+import 'package:flutter/material.dart';
 import 'package:fusion_news/globals/globals.dart';
 import 'package:fusion_news/providers/provider_news_channel.dart';
+import 'package:fusion_news/providers/provider_stories.dart';
+import 'package:fusion_news/providers/provider_stories.dart';
 import 'package:fusion_news/screens/screen_home_page/appbar_changer.dart';
-import 'package:fusion_news/screens/screen_home_page/drawer_header_changer.dart';
+import 'package:fusion_news/screens/screen_home_page/categories_tab_bar.dart';
+import 'package:fusion_news/screens/screen_home_page/drawer_categories.dart';
+import 'package:fusion_news/screens/screen_home_page/end_drawer.dart';
 import 'package:fusion_news/screens/screen_home_page/news_story_list.dart';
 import 'package:fusion_news/service_locator.dart';
 import 'package:fusion_news/utils/utils.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+// Main screen of the application
+class ScreenHomePage extends StatefulWidget {
+  const ScreenHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ScreenHomePage> createState() => _ScreenHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  // Category Variable to store the category name
-  int categoryIndex = 0;
-
-  double drawerWidthFactor = 0.77;
-
-  final ScrollController _controller = ScrollController();
-
-  late TabController _tabController;
+class _ScreenHomePageState extends State<ScreenHomePage>
+    with TickerProviderStateMixin {
+  // Controller for the TabBar
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 10, vsync: this);
 
-    _tabController.addListener(() {
+    // Initialize the TabController
+    tabController = TabController(length: 4, vsync: this);
+
+    // Add a listener to the TabController to switch the news channel
+    tabController.addListener(() {
+      
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Get the NewsChannelProvider
+    final newsProvider =
+        Provider.of<NewsChannelProvider>(context, listen: false);
+
+    final providerStories = ProviderStories();
+
+    // Build the UI
+    return FutureBuilder(
+      future: providerStories.getNews(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return DefaultTabController(
+            initialIndex: 0,
+            length: 4,
+            child: Scaffold(
+              // TabBar for news channels
+              bottomNavigationBar: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                dividerColor: Colors.transparent,
+                indicatorColor:
+                    Global.getTabIndicatorColor(newsProvider.currentChannel),
+
+                // Switch the news channel when a tab is tapped
+                onTap: (value) {
+                  if (mounted) {
+                    newsProvider.activeChannel(context).getNews();
+                    setState(() {
+                      getIt<NewsChannelProvider>()
+                          .switchChannel(newsChannels[value]);
+                      newsProvider.switchChannel(newsChannels[value]);
+                      newsProvider.activeChannel(context).setCurrentCategory(0);
+                    });
+                  }
+                },
+                tabs: const [
+                  Tab(
+                    text: 'ProPakistani',
+                  ),
+                  Tab(
+                    text: 'Dawn',
+                  ),
+                  Tab(
+                    text: 'The Express Tribune',
+                  ),
+                  Tab(
+                    text: 'Brecorder',
+                  )
+                ],
+              ),
+
+              // TabBarView for the news stories
+              body: const TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                children: <Widget>[
+                  NestedTabBar(),
+                  NestedTabBar(),
+                  NestedTabBar(),
+                  NestedTabBar(),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+// NestedTabBar class to display the news stories
+class NestedTabBar extends StatefulWidget {
+  const NestedTabBar({super.key});
+  @override
+  State<NestedTabBar> createState() => _NestedTabBarState();
+}
+
+class _NestedTabBarState extends State<NestedTabBar>
+    with TickerProviderStateMixin {
+  // Variable to store the category name
+  int categoryIndex = 0;
+
+  // ScrollController for the ListView
+  final ScrollController scrollController = ScrollController();
+
+  // Controller for the TabBar
+  late final TabController tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize the TabController
+    tabController = TabController(length: 10, vsync: this);
+
+    // Add a listener to the TabController to switch the news category
+    tabController.addListener(() {
       getIt<NewsChannelProvider>()
           .activeChannel(context)
-          .setCurrentCategory(_tabController.index);
+          .setCurrentCategory(tabController.index);
       setState(() {
-        categoryIndex = _tabController.index;
         getIt<NewsChannelProvider>().activeChannel(context).getNews();
       });
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+    scrollController.dispose();
+  }
 
-    var newsProvider = Provider.of<NewsChannelProvider>(context);
-    
+  @override
+  Widget build(BuildContext context) {
+    // Get the NewsChannelProvider
+    final newsProvider = Provider.of<NewsChannelProvider>(context);
+
+    // Build the UI
     return DefaultTabController(
         length: newsProvider.getCategories().length,
         child: Scaffold(
             drawerDragStartBehavior: DragStartBehavior.start,
 
             //EndDrawer
-            endDrawer: SizedBox(
-              height: MediaQuery.of(context).size.width * 1.8,
-              child: Drawer(
-                width: MediaQuery.of(context).size.width * drawerWidthFactor,
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: ListView.builder(
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      itemCount: newsChannels.length,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return const SizedBox(
-                            height: 80,
-                            child: DrawerHeader(
-                              decoration: BoxDecoration(
-                                color: Global.kColorPrimary,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Channels",
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
-                          index -= 1;
-                          return ListTile(
-                            title: Text(
-                              newsChannels[index],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.05),
-                            ),
-                            onTap: () {
-                              if (mounted) {
-                                newsProvider.activeChannel(context).getNews();
-                                setState(() {
-                                  getIt<NewsChannelProvider>()
-                                      .switchChannel(newsChannels[index]);
-                                  newsProvider
-                                      .switchChannel(newsChannels[index]);
-                                  categoryIndex = 0;
-                                  _tabController.index = 0;
-
-                                  Navigator.pop(context);
-                                });
-                              }
-                            },
-                          );
-                        }
-                      }),
-                ),
-              ),
-            ),
+            endDrawer: EndDrawer(
+                tabController: tabController, newsProvider: newsProvider),
 
             //Drawer
-            drawer: SizedBox(
-              height: MediaQuery.of(context).size.width * 1.8,
-              child: Drawer(
-                width: MediaQuery.of(context).size.width * drawerWidthFactor,
-                //ListView to create a list of Categories
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    children: [
-                      DrawerHeaderChanger(newsProvider: newsProvider),
-
-                      //Looping over the Category List to create a list of Categories
-                      for (int i = 0;
-                          i < newsProvider.getCategories().length;
-                          i++)
-                        ListTile(
-                          title: Text(
-                            newsProvider.getCategories()[i],
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.04),
-                          ),
-                          onTap: () {
-                            newsProvider
-                                .activeChannel(context)
-                                .setCurrentCategory(i);
-                            if (mounted) {
-                              setState(() {
-                                newsProvider.activeChannel(context).getNews();
-                                Navigator.pop(context);
-                                categoryIndex = i;
-                                void scrollToTopInstantly(
-                                    ScrollController controller) {
-                                  controller.animateTo(
-                                    0,
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-
-                                scrollToTopInstantly(_controller);
-                              });
-                            }
-                          },
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            drawer: DrawerCategories(
+                newsProvider: newsProvider, scrollController: scrollController),
 
             //AppBar
             appBar: AppBarChanger(newsProvider: newsProvider),
-            bottomNavigationBar: TabBar(
-              tabAlignment: TabAlignment.start,
-              onTap: (value) {
-                newsProvider.activeChannel(context).setCurrentCategory(value);
+            bottomNavigationBar: CategoriesTabBar(
+                tabController: tabController,
+                newsProvider: newsProvider,
+                scrollController: scrollController),
 
-                if (mounted) {
-                  setState(() {
-                    newsProvider.activeChannel(context).getNews();
-                    categoryIndex = value;
-                    void scrollToTopInstantly(ScrollController controller) {
-                      controller.animateTo(
-                        0,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    }
-
-                    scrollToTopInstantly(_controller);
-                  });
-                }
-              },
-              isScrollable: true,
-              tabs: [
-                for (int i = 0; i < 10; i++)
-                  Tab(
-                    text: newsProvider.getCategories()[i],
-                  )
-              ],
-              controller: _tabController,
-            ),
-            body: FutureBuilder(
-                future: newsProvider.activeChannel(context).getNews(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return TabBarView(
-                        controller: _tabController,
-                        children: List.generate(
-                            newsProvider.getCategories().length, (index) {
-                          return NewsStoryList(
-                            key: UniqueKey(),
-                            controller: _controller,
-                            categoryIndex: categoryIndex,
-                            newsProvider: newsProvider,
-                          );
-                        }));
-                  }
-                })));
+            //NewsStoryList
+            body: NewsStoryList(
+                categoryIndex: categoryIndex,
+                newsProvider: newsProvider,
+                scrollController: scrollController,
+                tabController: tabController)));
   }
 }

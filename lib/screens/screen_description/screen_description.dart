@@ -51,16 +51,12 @@ class _ScreenDescriptionState extends State<ScreenDescription> {
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     var newsProvider = Provider.of<NewsChannelProvider>(context).activeChannel(context);
     int index = widget.index;
-    
-
+  
     return Scaffold(
-
-
       floatingActionButton:
         BackdropFilter(
           filter:  isDrawerOpen ? ImageFilter.blur(sigmaX: 5, sigmaY: 5) : ImageFilter.blur(sigmaX: 0, sigmaY: 0),
@@ -313,6 +309,26 @@ class _ScreenDescriptionState extends State<ScreenDescription> {
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.02,
                 ),
+                
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Text(
+                    newsProvider.getStoryDescription(index),
+                    textAlign: TextAlign.justify,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                            ? Colors.black
+                            : Colors.white),
+                  ),
+                ),
+
+                SizedBox(
+                  height: MediaQuery.sizeOf(context).height * 0.02,
+                ),
+
                 //Content
                 Container(
                   padding: const EdgeInsets.only(left: 10, right: 10),

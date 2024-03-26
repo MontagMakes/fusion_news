@@ -51,12 +51,13 @@ class TribuneApiService {
               document.findAllElements("description").elementAt(i).innerText;
               description = description.trimLeft().trimRight();
               
-          var imageURL = document
+          String imageURL = document
               .findAllElements("img")
               .elementAt(i - 1)
-              .getAttribute("src");
+              .getAttribute("src") ?? "";
 
           toReturn.add(ModelStory(
+              id: i,
               title: title,
               articleLink: articleLink,
               date: date,

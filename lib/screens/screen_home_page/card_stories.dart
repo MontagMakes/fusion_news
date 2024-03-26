@@ -1,5 +1,6 @@
 import 'package:fusion_news/providers/provider_news_channel.dart';
 import 'package:flutter/material.dart';
+import 'package:fusion_news/providers/provider_stories.dart';
 import 'package:provider/provider.dart';
 
 class CardStories extends StatefulWidget {
@@ -34,7 +35,7 @@ class _CardStoriesState extends State<CardStories> {
             image: DecorationImage(
               fit: BoxFit.cover,
               image: NetworkImage(
-                provider.getStoryImageURL(index),
+                Provider.of<ProviderStories>(context).getStories(index).imageURL.toString(),
               ),
             ),
           ),
@@ -61,7 +62,7 @@ class _CardStoriesState extends State<CardStories> {
           left: 18,
           width: MediaQuery.sizeOf(context).width * 0.91,
           child: Text(
-            provider.getStoryTitle(index),
+            Provider.of<ProviderStories>(context).getStories(index).title.toString(),
             textAlign: TextAlign.justify,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.bold,
@@ -75,7 +76,7 @@ class _CardStoriesState extends State<CardStories> {
           bottom: 18,
           right: 15,
           child: Text(
-            provider.getStoryDate(index),
+            Provider.of<ProviderStories>(context).getStories(index).date,
             textAlign: TextAlign.right,
             style: TextStyle(
                 color: Colors.white,

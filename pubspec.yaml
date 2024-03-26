@@ -49,6 +49,7 @@ dependencies:
   share_plus: ^7.2.2
   shared_preferences: ^2.2.2
   get_it: ^7.6.7
+  html: ^0.15.4
 
 
 dev_dependencies:

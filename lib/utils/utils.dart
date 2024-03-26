@@ -1,3 +1,11 @@
+final List<String> newsChannels = [
+  'ProPakistani',
+  'Dawn',
+  'Tribune',
+  'Brecorder',
+  '',//Needed because the channel List omits the last value
+];
+
 final List<String> categoriesProPakistani = [
   'Home',
   'Pakistan',
@@ -23,16 +31,7 @@ final List<String> linkCategoriesProPakistani = [
   'category/others/sports',
   'category/others/automobile',
   'category/filter/news',
-  
 ];
-
-final List<String> newsChannels = [
-  'ProPakistani',
-  'Dawn',
-  'Tribune',
-  '',//Needed because the channel List omits the last value
-];
-
 
 final List<String> categoriesTribune = [
   'Home',
@@ -58,4 +57,17 @@ final List<String> categoriesDawn = [
   'Sport',
   'Magazines',
   'Blogs',
+];
+
+final List<String> categoriesBrecorder = [
+  'Home',
+  'Latest-news',
+  'br-research',
+  'markets',
+  'business-finance',
+  'Editorials',
+  'Opinion',
+  'Technology',
+  'Sports',
+  'perspectives'
 ];
