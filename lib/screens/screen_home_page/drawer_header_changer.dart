@@ -10,6 +10,7 @@ class DrawerHeaderChanger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("DrawerHeaderChanger: ${newsProvider.currentChannel}");
 
     //DrawerHeader ProPakistani
     if (newsProvider.currentChannel == "ProPakistani" || newsProvider.currentChannel == "default") {
@@ -94,6 +95,24 @@ class DrawerHeaderChanger extends StatelessWidget {
             ),
           ),
         ),
+      );
+    
+    //DrawerHeader Business Recorder
+    } else if (newsProvider.currentChannel == "Brecorder") {
+      return const DrawerHeader(
+        decoration: BoxDecoration(
+          color: Global.colorBrecorder,
+        ),
+        child: Center(
+          child: Text(
+            "Business Recorder",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 40,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        )
       );
 
     //DrawerHeader Fusion News

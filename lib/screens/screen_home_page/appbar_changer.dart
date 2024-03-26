@@ -126,6 +126,34 @@ class _AppBarChangerState extends State<AppBarChanger> {
         ],
       );
 
+    //Appbar Business Recorder
+    } else if (widget.newsProvider.currentChannel == "Brecorder") {
+      return AppBar(
+        iconTheme: IconThemeData(color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+                          ? Colors.black
+                          : Colors.black),
+
+        centerTitle: true,
+        backgroundColor: Global.colorBrecorder,
+        title: Text(
+          "Business Recorder",
+          style: GoogleFonts.playfair(
+              fontSize: MediaQuery.of(context).size.width * 0.08,
+              fontWeight: FontWeight.w700,
+              color: Colors.black),
+        ),
+
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ScreenSetting()));
+            },
+            icon: const Icon(Icons.settings, color: Colors.black,),
+          ),
+        ],
+      );
+
     //Appbar Fusion News
     } else {
       return AppBar(

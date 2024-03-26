@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fusion_news/globals/globals.dart';
+import 'package:fusion_news/providers/provider_news_brecorder.dart';
 import 'package:fusion_news/providers/provider_news_dawn.dart';
 import 'package:fusion_news/providers/provider_news_propakistani.dart';
 import 'package:fusion_news/screens/screen_home_page/screen_home_page.dart';
@@ -7,7 +8,6 @@ import 'package:fusion_news/providers/provider_news_channel.dart';
 import 'package:fusion_news/providers/provider_news_tribune.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fusion_news/screens/screen_home_page/screen_test_home_page.dart';
 import 'package:fusion_news/service_locator.dart';
 // ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
@@ -43,6 +43,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => NewsProviderProPakistani()),
     ChangeNotifierProvider(create: (_) => NewsProviderDawn()),
     ChangeNotifierProvider(create: (_) => NewsProviderTribune()),
+    ChangeNotifierProvider(create: (_) => NewsProviderBrecorder()),
     ChangeNotifierProvider(create: (_) => NewsChannelProvider()),
     ChangeNotifierProvider(create: (_) => SharedPreferencesProvider())
 
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
         theme: theme,
         darkTheme: dark,
         themeAnimationDuration: const Duration(milliseconds: 500),
-        home: const TabBarExample(),
+        home: const ScreenHomePage(),
       ),
     );
   }

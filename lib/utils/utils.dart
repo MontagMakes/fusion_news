@@ -30,6 +30,7 @@ final List<String> newsChannels = [
   'ProPakistani',
   'Dawn',
   'Tribune',
+  'Brecorder',
   '',//Needed because the channel List omits the last value
 ];
 
@@ -58,4 +59,17 @@ final List<String> categoriesDawn = [
   'Sport',
   'Magazines',
   'Blogs',
+];
+
+final List<String> categoriesBrecorder = [
+  'Home',
+  'Latest-News',
+  'BR-Research',
+  'Markets',
+  'Business-Finance',
+  'World',
+  'Editorials',
+  'Opinion',
+  'Sports',
+  'Pakistan',
 ];
