@@ -5,7 +5,6 @@ import 'package:fusion_news/providers/provider_news_channel.dart';
 import 'package:fusion_news/screens/screen_home_page/appbar_changer.dart';
 import 'package:fusion_news/screens/screen_home_page/categories_tab_bar.dart';
 import 'package:fusion_news/screens/screen_home_page/drawer_categories.dart';
-import 'package:fusion_news/screens/screen_home_page/end_drawer.dart';
 import 'package:fusion_news/screens/screen_home_page/news_story_list.dart';
 import 'package:fusion_news/service_locator.dart';
 import 'package:fusion_news/utils/utils.dart';
@@ -164,10 +163,6 @@ class _NestedTabBarState extends State<NestedTabBar>
         length: newsProvider.getCategories().length,
         child: Scaffold(
             drawerDragStartBehavior: DragStartBehavior.start,
-
-            //EndDrawer
-            endDrawer: EndDrawer(
-                tabController: tabController, newsProvider: newsProvider),
 
             //Drawer
             drawer: DrawerCategories(
