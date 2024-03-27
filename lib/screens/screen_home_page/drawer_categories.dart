@@ -6,9 +6,10 @@ import 'package:fusion_news/screens/screen_home_page/drawer_header_changer.dart'
 class DrawerCategories extends StatefulWidget {
   final NewsChannelProvider newsProvider;
   final ScrollController scrollController;
+  final TabController tabController;
 
   const DrawerCategories(
-      {super.key, required this.newsProvider, required this.scrollController});
+      {super.key, required this.newsProvider, required this.scrollController, required this.tabController});
 
   @override
   State<DrawerCategories> createState() => _DrawerCategoriesState();
@@ -46,11 +47,13 @@ class _DrawerCategoriesState extends State<DrawerCategories> {
                   // Switch the news category when a category is tapped
                   onTap: () {
                     widget.newsProvider.activeChannel(context).setCurrentCategory(i);
-
+                    
                     if (mounted) {
                       setState(() {
                         widget.newsProvider.activeChannel(context).getNews();
                         widget.newsProvider.setCurrentCategory(i);
+                        widget.tabController.animateTo(i);
+
                         Navigator.pop(context);
                     
                         void scrollToTopInstantly(ScrollController controller) {

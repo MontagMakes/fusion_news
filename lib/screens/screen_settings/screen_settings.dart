@@ -1,6 +1,9 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fusion_news/globals/globals.dart';
+import 'package:fusion_news/providers/provider_news_channel.dart';
+import 'package:provider/provider.dart';
 
 class ScreenSetting extends StatefulWidget {
   const ScreenSetting({super.key});
@@ -14,6 +17,8 @@ class _ScreenSettingState extends State<ScreenSetting> {
 
   @override
   Widget build(BuildContext context) {
+    var newsProvider = Provider.of<NewsChannelProvider>(context);
+
     // When dark mode is on, the switch will stay switched on
     AdaptiveThemeMode themeMode = AdaptiveTheme.of(context).mode;
     if (themeMode == AdaptiveThemeMode.light) {
@@ -22,10 +27,22 @@ class _ScreenSettingState extends State<ScreenSetting> {
       isDarkMode = true;
     }
 
-    return Scaffold(
+    appBarBackgroundColorChanger(newsProvider){
+      if (newsProvider.currentChannel == "default" || newsProvider.currentChannel == "propakistani"){
+        return Global.colorProPakistani;
+      } else if (newsProvider.currentChannel == "Dawn"){
+        return Global.colorDawn;
+      } else if (newsProvider.currentChannel == "Tribune"){
+        return Global.colorTribune;
+      } else if (newsProvider.currentChannel == "Brecorder"){
+        return Colors.black;
+      }
+    }
 
+    return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: const Text("Settings", style: TextStyle(color: Colors.white),),
+        backgroundColor: appBarBackgroundColorChanger(newsProvider),
       ),
 
       body: Padding(

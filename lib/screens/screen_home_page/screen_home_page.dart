@@ -171,7 +171,7 @@ class _NestedTabBarState extends State<NestedTabBar>
 
             //Drawer
             drawer: DrawerCategories(
-                newsProvider: newsProvider, scrollController: scrollController),
+                newsProvider: newsProvider, scrollController: scrollController, tabController: tabController,),
 
             //AppBar
             appBar: AppBarChanger(newsProvider: newsProvider),
