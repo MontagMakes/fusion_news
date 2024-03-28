@@ -1,5 +1,4 @@
 import 'package:fusion_news/api_manager/api_manager_brecorder.dart';
-import 'package:fusion_news/api_manager/api_manager_tribune.dart';
 import 'package:fusion_news/models/model_story.dart';
 import 'package:fusion_news/utils/utils.dart';
 import 'package:flutter/material.dart';

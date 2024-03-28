@@ -1,6 +1,5 @@
 import 'package:fusion_news/models/model_story.dart';
 import 'package:dio/dio.dart';
-import 'package:html_unescape/html_unescape_small.dart';
 import 'package:xml/xml.dart';
 
 class BrecorderApiService {
@@ -27,8 +26,10 @@ class BrecorderApiService {
               .innerText
               .trimLeft()
               .trimRight();
+
           var articleLink =
               document.findAllElements("link").elementAt(i).innerText;
+
           var date = document
               .findAllElements("pubDate")
               .elementAt(i)
@@ -39,18 +40,20 @@ class BrecorderApiService {
               .findAllElements("content:encoded")
               .elementAt(i - 1)
               .innerText
-              .replaceRange(0, 5, '')
               .trimLeft()
               .trimRight();
 
-          content = HtmlUnescape()
-              .convert(content)
-              .replaceAll(RegExp(r'&([^;]+);'), '');
-
-          var description =
-              document.findAllElements("description").elementAt(i).innerText;
-              description = description.trimLeft().trimRight();
-              
+              content = content.toString().replaceAll('''{try{this.style.height=this.contentWindow.document.body.scrollHeight+'px';}catch{}}, 100)"''', "");
+              content = content.toString().replaceAll('width="100%" frameborder="0" scrolling="no"', "");
+              content = content.toString().replaceAll('style="height:400px;position:relative"', "");
+              content = content.toString().replaceAll('sandbox="allow-same-origin allow-scripts allow-popups allow-modals allow-forms">', "");
+              content = content.toString().replaceAll('</p>', "\n");
+              content = content.toString().replaceAll(RegExp(r'''<[^>]*>|</.*>[^]'''), "");
+              content = content.toString().replaceAll('<p>', "");
+              content = content.toString().replaceAll('</p>', "\n\n");
+              content = content.replaceAll(RegExp(r'/\n/g'), '\n\n\n');
+          
+          
           var imageURL = document
               .findAllElements("media:content")
               .elementAt(i - 1)
@@ -62,7 +65,7 @@ class BrecorderApiService {
               date: date,
               content: content,
               imageURL: imageURL,
-              description: description,
+              description: "",
               ));
         }
         } on XmlTagException catch (e){

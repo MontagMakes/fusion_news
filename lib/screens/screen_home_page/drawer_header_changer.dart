@@ -10,7 +10,6 @@ class DrawerHeaderChanger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("DrawerHeaderChanger: ${newsProvider.currentChannel}");
 
     //DrawerHeader ProPakistani
     if (newsProvider.currentChannel == "ProPakistani" || newsProvider.currentChannel == "default") {

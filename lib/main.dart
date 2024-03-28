@@ -16,7 +16,7 @@ import 'providers/provider_shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
-  // //Firebase
+  //Firebase
   // await Firebase.initializeApp();
 
   // //Firebase Analytics
