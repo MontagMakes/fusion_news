@@ -30,14 +30,15 @@ class _CategoriesTabBarState extends State<CategoriesTabBar> {
           setState(() {
             widget.newsProvider.activeChannel(context).getNews();
             widget.newsProvider.setCurrentCategory(value);
-            void scrollToTopInstantly(ScrollController controller) {
-              controller.animateTo(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
+            void scrollToTopInstantly(ScrollController controller) async{
+              if (controller.hasClients){
+                await controller.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              }
             }
-
             scrollToTopInstantly(widget.scrollController);
           });
         }

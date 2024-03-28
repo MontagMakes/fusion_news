@@ -136,13 +136,19 @@ class _NestedTabBarState extends State<NestedTabBar>
     tabController = TabController(length: 10, vsync: this);
 
     // Add a listener to the TabController to switch the news category
-    tabController.addListener(() {
-      getIt<NewsChannelProvider>()
+    tabController.addListener((){
+        getIt<NewsChannelProvider>().activeChannel(context).getNews();
+
+        getIt<NewsChannelProvider>()
           .activeChannel(context)
           .setCurrentCategory(tabController.index);
-      setState(() {
-        getIt<NewsChannelProvider>().activeChannel(context).getNews();
-      });
+
+        
+        setState(() {
+          
+        });
+      
+      
     });
   }
 
