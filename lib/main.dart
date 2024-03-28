@@ -1,4 +1,8 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:fusion_news/globals/globals.dart';
 import 'package:fusion_news/providers/provider_news_brecorder.dart';
 import 'package:fusion_news/providers/provider_news_dawn.dart';
@@ -17,21 +21,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
   //Firebase
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
-  // //Firebase Analytics
-  // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  // analytics.setAnalyticsCollectionEnabled(false);
-
-  // //Firebase Crashlytics
-  // FlutterError.onError = (errorDetails) {
-  //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  // };
+  //Firebase Analytics
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //   return true;
-  // };
+  analytics.setAnalyticsCollectionEnabled(false);
+
+  //Firebase Crashlytics
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   //saving Theme mode to
   final savedThemeMode = await AdaptiveTheme.getThemeMode();

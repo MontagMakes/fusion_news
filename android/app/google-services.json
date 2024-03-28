@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "367234072809",
+    "project_id": "fusionnews-41a5c",
+    "storage_bucket": "fusionnews-41a5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367234072809:android:e786dd22ec575e09573078",
+        "android_client_info": {
+          "package_name": "com.example.fusion_news"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb-4osv3v47iuUlWX9Bu-DCsP1w79LqAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367234072809:android:1334d7170efc6723573078",
+        "android_client_info": {
+          "package_name": "com.montagmakes.news_pakistan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb-4osv3v47iuUlWX9Bu-DCsP1w79LqAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
